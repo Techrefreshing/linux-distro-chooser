@@ -106,16 +106,5 @@ This project is open source and free to use for learning and personal projects.
 
 ---
 
-## 🧠 Final Rule to Remember
-- README content = **normal text**
-- Code blocks = only where needed (like URLs)
-- Do **not** wrap the whole README in ```  
 
-You’re doing it right now 👍  
-If you want, I can also:
-- Add a license file
-- Add GitHub badges
-- Customize README for SEO
-
-Just tell me 🚀
 
