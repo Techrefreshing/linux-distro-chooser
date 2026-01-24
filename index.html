@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<!-- SEO -->
+<title>Linux Distro Chooser – Find the Best Linux Distribution</title>
+<meta name="description" content="Find the best Linux distro for beginners, gamers, developers, and servers. Simple Linux Distro Chooser that works on mobile and desktop.">
+<meta name="robots" content="index, follow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#020617">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Linux Distro Chooser">
+<meta property="og:description" content="Choose the best Linux distribution based on your experience and needs.">
+<meta property="og:type" content="website">
+
+<style>
+:root{
+  --accent:#38bdf8;
+  --accent2:#22c55e;
+  --bg:#020617;
+  --glass:rgba(255,255,255,.12);
+  --border:rgba(255,255,255,.14);
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:16px;
+  background:
+    radial-gradient(circle at 20% 10%,#1e293b,transparent 40%),
+    radial-gradient(circle at 80% 80%,#0f766e,transparent 40%),
+    var(--bg);
+  color:var(--text);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+main{
+  width:640px;
+  max-width:96%;
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.18),
+    rgba(255,255,255,.05)
+  );
+  border:1px solid var(--border);
+  backdrop-filter:blur(18px);
+  border-radius:28px;
+  padding:32px;
+  box-shadow:0 50px 100px rgba(0,0,0,.7);
+}
+
+/* HEADER */
+header{text-align:center}
+header h1{
+  margin:0;
+  font-size:32px;
+  letter-spacing:.3px;
+}
+header p{
+  margin:8px 0 0;
+  font-size:15px;
+  color:var(--muted);
+}
+
+/* SEO INTRO */
+.seo-intro{
+  margin:24px 0;
+  font-size:16px;
+  line-height:1.75;
+  color:#e5e7eb;
+}
+.seo-intro h2{
+  font-size:20px;
+  margin-bottom:8px;
+}
+
+/* PROGRESS */
+.progress{
+  margin:26px 0 30px;
+  height:7px;
+  background:rgba(255,255,255,.12);
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress span{
+  display:block;
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .45s ease;
+}
+
+/* QUIZ */
+.question{
+  font-size:18px;
+  font-weight:600;
+  margin-bottom:16px;
+}
+
+.option{
+  padding:18px;
+  margin-bottom:14px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:18px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:16px;
+  transition:.18s ease;
+}
+.option:hover{
+  transform:translateY(-2px);
+  border-color:var(--accent);
+  background:rgba(56,189,248,.18);
+}
+
+/* RESULTS */
+.result-card{
+  background:rgba(2,6,23,.8);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:16px;
+}
+.result-card strong{
+  font-size:16px;
+}
+.result-card a{
+  display:inline-block;
+  margin-top:8px;
+  font-size:14px;
+  color:var(--accent);
+  text-decoration:none;
+}
+.result-card a:hover{text-decoration:underline}
+
+.reset{
+  width:100%;
+  padding:16px;
+  margin-top:20px;
+  border:none;
+  border-radius:18px;
+  background:rgba(255,255,255,.18);
+  color:var(--text);
+  font-size:16px;
+  cursor:pointer;
+}
+
+/* FAQ */
+.seo-faq{
+  margin-top:32px;
+  font-size:15px;
+  line-height:1.7;
+  color:#e5e7eb;
+}
+.seo-faq h2{
+  font-size:20px;
+  margin-bottom:10px;
+}
+.seo-faq h3{
+  font-size:16px;
+  margin-bottom:6px;
+}
+
+/* FOOTER */
+footer{
+  margin-top:22px;
+  font-size:13px;
+  text-align:center;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+
+<main>
+<header>
+  <h1>🐧 Linux Distro Chooser</h1>
+  <p>Fast · Mobile-friendly · No installation</p>
+</header>
+
+<section class="seo-intro">
+  <h2>Choosing the Right Linux Distro Made Simple</h2>
+  <p>
+    Picking a Linux distribution can feel overwhelming, especially if you are new to Linux
+    or switching from Windows. There are many options available, each designed for different
+    users and purposes. This Linux Distro Chooser helps narrow things down by suggesting
+    distributions based on your experience level, usage needs, and preference for stability
+    or performance.
+  </p>
+</section>
+
+<section class="progress"><span id="bar"></span></section>
+<section id="content"></section>
+
+<section class="seo-faq">
+  <h2>Common Questions About Linux Distros</h2>
+
+  <h3>Which Linux distro is best for beginners?</h3>
+  <p>
+    Ubuntu LTS, Linux Mint, and Zorin OS are often recommended for beginners because they are
+    easy to install, well documented, and have strong community support.
+  </p>
+
+  <h3>Which Linux distro is good for gaming?</h3>
+  <p>
+    Pop!_OS, Garuda Linux, and Nobara Linux are popular among gamers due to better driver
+    support and gaming-focused tweaks.
+  </p>
+</section>
+
+<footer>
+  Maintained by Linux enthusiasts at <strong>techrefreshing.com</strong>
+</footer>
+</main>
+
+<script>
+const BASE_URL="https://techrefreshing.com/?distro=";
+
+const quiz=[
+ {q:"Your Linux experience?",o:["Beginner","Intermediate","Advanced"]},
+ {q:"Main purpose?",o:["Desktop","Programming","Gaming","Server"]},
+ {q:"Preference?",o:["Maximum Stability","Balanced","Latest Features"]}
+];
+
+const distros=[
+ {n:"Ubuntu LTS",t:["Beginner","Desktop","Balanced"]},
+ {n:"Linux Mint",t:["Beginner","Desktop","Stability"]},
+ {n:"Zorin OS",t:["Beginner","Desktop"]},
+ {n:"Debian Stable",t:["Stability","Server"]},
+ {n:"MX Linux",t:["Stability","Desktop"]},
+ {n:"openSUSE Leap",t:["Stability"]},
+ {n:"Rocky Linux",t:["Server","Stability"]},
+ {n:"AlmaLinux",t:["Server","Stability"]},
+ {n:"Fedora Workstation",t:["Programming","Latest"]},
+ {n:"Fedora Server",t:["Server","Latest"]},
+ {n:"Pop!_OS",t:["Gaming","Desktop"]},
+ {n:"Garuda Linux",t:["Gaming","Latest","Advanced"]},
+ {n:"Nobara Linux",t:["Gaming","Latest"]},
+ {n:"Regata OS",t:["Gaming"]},
+ {n:"Manjaro",t:["Balanced"]},
+ {n:"Arch Linux",t:["Advanced","Latest"]},
+ {n:"Gentoo",t:["Advanced"]},
+ {n:"Void Linux",t:["Advanced","Stability"]}
+];
+
+let step=0,answers=[];
+const content=document.getElementById("content");
+const bar=document.getElementById("bar");
+
+const slug=n=>n.replace(/\s+/g,"-").replace(/[!_]/g,"");
+
+function render(){
+  bar.style.width=(step/quiz.length)*100+"%";
+  content.innerHTML="";
+  if(step<quiz.length){
+    content.innerHTML=`<div class="question">${quiz[step].q}</div>`;
+    quiz[step].o.forEach(v=>{
+      content.innerHTML+=`<div class="option" onclick="answer('${v}')">${v}<span>→</span></div>`;
+    });
+  }else showResults();
+}
+
+function answer(v){answers.push(v);step++;render()}
+
+function showResults(){
+  bar.style.width="100%";
+  const matches=distros.filter(d=>answers.some(a=>d.t.join(" ").includes(a))).slice(0,8);
+  content.innerHTML=`<div class="question">Recommended Distros</div>`+
+  matches.map(d=>`
+    <div class="result-card">
+      <strong>${d.n}</strong><br>
+      <a href="${BASE_URL}${slug(d.n)}" target="_blank">
+        Read more on Tech Refreshing →
+      </a>
+    </div>`).join("")+
+  `<button class="reset" onclick="reset()">Start Over</button>`;
+}
+
+function reset(){step=0;answers=[];render()}
+render();
+</script>
+
+</body>
+</html>
