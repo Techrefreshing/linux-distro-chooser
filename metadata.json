@@ -1,6 +1,0 @@
-{
-  "name": "Linux Distro Chooser",
-  "description": "An intuitive helper for choosing the right Linux distribution based on user needs, hardware, and experience level, complete with comparisons and security best practices.",
-  "requestFramePermissions": [],
-  "majorCapabilities": []
-}
