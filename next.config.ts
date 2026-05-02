@@ -1,6 +1,10 @@
 import type {NextConfig} from 'next';
 
+const isGithubActions = process.env.GITHUB_ACTIONS || false;
+
 const nextConfig: NextConfig = {
+  basePath: isGithubActions ? '/linux-distro-chooser' : '',
+  assetPrefix: isGithubActions ? '/linux-distro-chooser' : '',
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,
