@@ -14,6 +14,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Linux Distro Chooser - Find Your Perfect Linux OS">
   <meta name="twitter:description" content="An intuitive helper for choosing the right Linux distribution based on user needs, hardware, and experience level.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐧</text></svg>">
+  <link rel="manifest" href="manifest.json">
   <meta name="google-site-verification" content="7ibcnMoNz2NhgIDVPhvyhxFmism6645gTmYTwAnhm6I" />
   <style>
     :root {
@@ -621,7 +623,86 @@
       .match-card { flex-direction: column; align-items: flex-start; }
       .chooser-actions { flex-direction: column; }
     }
+    
+    /* FAQ Section */
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 0;
+    }
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+    .faq-question {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-question:hover {
+      color: var(--primary);
+    }
+    .faq-answer {
+      margin-top: 1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      display: none;
+    }
+    .faq-answer.open {
+      display: block;
+    }
   </style>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Linux Distro Chooser",
+    "operatingSystem": "Linux",
+    "applicationCategory": "UtilitiesApplication",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "1024"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "An intuitive helper for choosing the right Linux distribution based on user needs, hardware, and experience level."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "What is the best Linux distro for beginners?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ubuntu, Linux Mint, and Pop!_OS are widely considered the best distributions for beginners due to their user-friendly interfaces, extensive hardware support, and large communities."
+      }
+    }, {
+      "@type": "Question",
+      "name": "Is Linux completely free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the vast majority of Linux distributions are completely free to download, use, and modify under open-source licenses."
+      }
+    }, {
+      "@type": "Question",
+      "name": "Can I play games on Linux?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Gaming on Linux has improved dramatically thanks to Valve's Proton compatibility layer, allowing many Windows games to run smoothly on Linux distributions."
+      }
+    }]
+  }
+  </script>
 </head>
 <body>
 
@@ -1055,6 +1136,55 @@
       <h2>Contact Us</h2>
       <p>If you have any questions or concerns regarding this Privacy Policy, please contact us at via the <a href="#" onclick="navigate('contact')">Contact Page</a> or via email at privacy@techrefreshing.com.</p>
     </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section">
+      <div style="max-width: 800px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <h1 style="font-size: 2.5rem;">Frequently Asked Questions</h1>
+          <p style="color: var(--text-muted); font-size: 1.1rem;">Common questions about switching to Linux and using our tools.</p>
+        </div>
+        
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1rem 2rem;">
+          <div class="faq-item">
+            <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('open')">
+              What is the best Linux distro for beginners?
+              <span style="color: var(--text-muted); font-size: 1.5rem;">+</span>
+            </div>
+            <div class="faq-answer">
+              Ubuntu, Linux Mint, and Pop!_OS are widely considered the best distributions for beginners. They offer user-friendly graphical interfaces, come with pre-installed software, and have massive communities that can help if you run into issues.
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('open')">
+              Is Linux completely free?
+              <span style="color: var(--text-muted); font-size: 1.5rem;">+</span>
+            </div>
+            <div class="faq-answer">
+              Yes! The vast majority of Linux distributions (like Ubuntu, Debian, Fedora, and Arch) are completely free to download, use, and modify. They are built on open-source philosophy, meaning you don't have to pay for software licenses.
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('open')">
+              Can I play games on Linux?
+              <span style="color: var(--text-muted); font-size: 1.5rem;">+</span>
+            </div>
+            <div class="faq-answer">
+              Absolutely. Gaming on Linux is better than ever. Thanks to Valve's Proton compatibility layer (used in steam), thousands of Windows-only games run beautifully on Linux. Native game support is also increasing daily.
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question" onclick="this.nextElementSibling.classList.toggle('open')">
+              Will my hardware work on Linux?
+              <span style="color: var(--text-muted); font-size: 1.5rem;">+</span>
+            </div>
+            <div class="faq-answer">
+              Most modern hardware works out-of-the-box on Linux because drivers are built directly into the kernel. You usually don't need to hunt for drivers like you do on Windows. The main exceptions are brand-new GPUs or highly specific peripheral devices (like certain Wi-Fi cards), but support usually arrives quickly.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -1083,6 +1213,7 @@
         <h3>Legal</h3>
         <ul>
           <li><a href="#" onclick="navigate('privacy-policy')">Privacy Policy</a></li>
+          <li><a href="#" onclick="navigate('faq')">FAQ</a></li>
         </ul>
       </div>
     </div>

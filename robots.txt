@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://techrefreshing.github.io/linux-distro-chooser/sitemap.xml
