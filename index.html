@@ -1,297 +1,1454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux Distro Chooser</title>
+  <meta name="description" content="An intuitive helper for choosing the right Linux distribution based on user needs, hardware, and experience level. Compare Ubuntu, Arch, Fedora, Debian and more.">
+  <meta name="keywords" content="Linux, Distro Chooser, Ubuntu, Arch Linux, Fedora, Debian, Open Source, Operating System, Tech Refreshing">
+  <meta name="author" content="Tech Refreshing">
+  <meta property="og:title" content="Linux Distro Chooser - Find Your Perfect Linux OS">
+  <meta property="og:description" content="An intuitive helper for choosing the right Linux distribution based on user needs, hardware, and experience level.">
+  <meta property="og:url" content="https://techrefreshing.github.io/linux-distro-chooser/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Linux Distro Chooser - Find Your Perfect Linux OS">
+  <meta name="twitter:description" content="An intuitive helper for choosing the right Linux distribution based on user needs, hardware, and experience level.">
+  <meta name="google-site-verification" content="7ibcnMoNz2NhgIDVPhvyhxFmism6645gTmYTwAnhm6I" />
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 0.75rem;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+    }
+    
+    main {
+      flex: 1;
+      width: 100%;
+    }
+    
+    .section {
+      display: none;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    
+    .section.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    h1, h2, h3, h4 {
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
 
-<!-- SEO -->
-<title>Linux Distro Chooser – Find the Best Linux Distribution</title>
-<meta name="description" content="Find the best Linux distro for beginners, gamers, developers, and servers. Simple Linux Distro Chooser that works on mobile and desktop.">
-<meta name="robots" content="index, follow">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#020617">
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 4rem 0;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: -0.025em;
+    }
+    
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: var(--radius);
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--border);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .feature-card {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    
+    .feature-icon {
+      width: 3rem;
+      height: 3rem;
+      background: #eff6ff;
+      color: var(--primary);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
 
-<!-- Open Graph -->
-<meta property="og:title" content="Linux Distro Chooser">
-<meta property="og:description" content="Choose the best Linux distribution based on your experience and needs.">
-<meta property="og:type" content="website">
-<meta name="google-site-verification" content="7ibcnMoNz2NhgIDVPhvyhxFmism6645gTmYTwAnhm6I" />
-<style>
-:root{
-  --accent:#38bdf8;
-  --accent2:#22c55e;
-  --bg:#020617;
-  --glass:rgba(255,255,255,.12);
-  --border:rgba(255,255,255,.14);
-  --text:#e5e7eb;
-  --muted:#94a3b8;
-}
+    /* Chooser Styles */
+    .chooser-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2.5rem;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+    }
+    
+    .progress-bar {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    
+    .progress-step {
+      height: 0.5rem;
+      width: 4rem;
+      border-radius: 1rem;
+      background-color: var(--border);
+    }
+    
+    .progress-step.active {
+      background-color: var(--primary);
+    }
+    
+    .chooser-step {
+      display: none;
+    }
+    
+    .chooser-step.active {
+      display: block;
+    }
+    
+    .chooser-title {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .option-btn {
+      text-align: left;
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      color: var(--text);
+    }
+    
+    .option-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    
+    .option-btn.selected {
+      border-color: var(--primary);
+      background-color: #eff6ff;
+    }
+    
+    .chooser-actions {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .chooser-actions .btn {
+      flex: 1;
+      padding: 1rem;
+    }
+    
+    /* Distros List Styles */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      border: none;
+      background-color: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    
+    .filter-btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .distros-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .distro-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .distro-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+    
+    .distro-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .distro-icon {
+      width: 3rem;
+      height: 3rem;
+      background: var(--bg);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+    
+    .distro-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .distro-desc {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+    
+    .distro-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      background: var(--bg);
+      border-radius: 0.25rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    /* Recommendations */
+    .matches-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .match-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .match-card.top-match {
+      border-color: var(--primary);
+      position: relative;
+    }
+    
+    .top-match-badge {
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-*{box-sizing:border-box}
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      background: var(--surface);
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background-color: var(--bg);
+      font-weight: 600;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
 
-body{
-  margin:0;
-  min-height:100vh;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-  font-size:16px;
-  background:
-    radial-gradient(circle at 20% 10%,#1e293b,transparent 40%),
-    radial-gradient(circle at 80% 80%,#0f766e,transparent 40%),
-    var(--bg);
-  color:var(--text);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
+    /* Forms */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    
+    /* Layout Grids for specific pages */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    @media(min-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .contact-info-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .contact-icon-bg {
+      flex-shrink: 0;
+      background: #eff6ff;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+    
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    @media(min-width: 768px) {
+      .services-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: box-shadow 0.2s;
+    }
+    .service-card:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .service-icon-bg {
+      background: #eff6ff;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+    
+    /* Content Typography wrapper */
+    .prose {
+      max-width: 800px;
+      margin: 0 auto;
+      color: var(--text);
+    }
+    .prose h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+    .prose h2 {
+      font-size: 1.75rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .prose p {
+      margin-bottom: 1.5rem;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+    .prose a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .prose a:hover {
+      text-decoration: underline;
+    }
+    .prose ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+    .prose ul li {
+      margin-bottom: 0.5rem;
+    }
 
-main{
-  width:640px;
-  max-width:96%;
-  background:linear-gradient(
-    180deg,
-    rgba(255,255,255,.18),
-    rgba(255,255,255,.05)
-  );
-  border:1px solid var(--border);
-  backdrop-filter:blur(18px);
-  border-radius:28px;
-  padding:32px;
-  box-shadow:0 50px 100px rgba(0,0,0,.7);
-}
+    /* Footer */
+    footer {
+      background-color: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      margin-top: auto;
+    }
+    
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
 
-/* HEADER */
-header{text-align:center}
-header h1{
-  margin:0;
-  font-size:32px;
-  letter-spacing:.3px;
-}
-header p{
-  margin:8px 0 0;
-  font-size:15px;
-  color:var(--muted);
-}
+    .footer-col h3 {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
 
-/* SEO INTRO */
-.seo-intro{
-  margin:24px 0;
-  font-size:16px;
-  line-height:1.75;
-  color:#e5e7eb;
-}
-.seo-intro h2{
-  font-size:20px;
-  margin-bottom:8px;
-}
+    .footer-col ul {
+      list-style: none;
+    }
 
-/* PROGRESS */
-.progress{
-  margin:26px 0 30px;
-  height:7px;
-  background:rgba(255,255,255,.12);
-  border-radius:999px;
-  overflow:hidden;
-}
-.progress span{
-  display:block;
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  transition:width .45s ease;
-}
+    .footer-col ul li {
+      margin-bottom: 0.75rem;
+    }
 
-/* QUIZ */
-.question{
-  font-size:18px;
-  font-weight:600;
-  margin-bottom:16px;
-}
+    .footer-col a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
 
-.option{
-  padding:18px;
-  margin-bottom:14px;
-  background:var(--glass);
-  border:1px solid var(--border);
-  border-radius:18px;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:16px;
-  transition:.18s ease;
-}
-.option:hover{
-  transform:translateY(-2px);
-  border-color:var(--accent);
-  background:rgba(56,189,248,.18);
-}
+    .footer-col a:hover {
+      color: var(--primary);
+    }
 
-/* RESULTS */
-.result-card{
-  background:rgba(2,6,23,.8);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:16px;
-}
-.result-card strong{
-  font-size:16px;
-}
-.result-card a{
-  display:inline-block;
-  margin-top:8px;
-  font-size:14px;
-  color:var(--accent);
-  text-decoration:none;
-}
-.result-card a:hover{text-decoration:underline}
-
-.reset{
-  width:100%;
-  padding:16px;
-  margin-top:20px;
-  border:none;
-  border-radius:18px;
-  background:rgba(255,255,255,.18);
-  color:var(--text);
-  font-size:16px;
-  cursor:pointer;
-}
-
-/* FAQ */
-.seo-faq{
-  margin-top:32px;
-  font-size:15px;
-  line-height:1.7;
-  color:#e5e7eb;
-}
-.seo-faq h2{
-  font-size:20px;
-  margin-bottom:10px;
-}
-.seo-faq h3{
-  font-size:16px;
-  margin-bottom:6px;
-}
-
-/* FOOTER */
-footer{
-  margin-top:22px;
-  font-size:13px;
-  text-align:center;
-  color:var(--muted);
-}
-</style>
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .match-card { flex-direction: column; align-items: flex-start; }
+      .chooser-actions { flex-direction: column; }
+    }
+  </style>
 </head>
-
 <body>
 
-<main>
-<header>
-  <h1>🐧 Linux Distro Chooser</h1>
-  <p>Fast · Mobile-friendly · No installation</p>
-</header>
-
-<section class="seo-intro">
-  <h2>Choosing the Right Linux Distro Made Simple</h2>
-  <p>
-    Picking a Linux distribution can feel overwhelming, especially if you are new to Linux
-    or switching from Windows. There are many options available, each designed for different
-    users and purposes. This Linux Distro Chooser helps narrow things down by suggesting
-    distributions based on your experience level, usage needs, and preference for stability
-    or performance.
-  </p>
-</section>
-
-<section class="progress"><span id="bar"></span></section>
-<section id="content"></section>
-
-<section class="seo-faq">
-  <h2>Common Questions About Linux Distros</h2>
-
-  <h3>Which Linux distro is best for beginners?</h3>
-  <p>
-    Ubuntu LTS, Linux Mint, and Zorin OS are often recommended for beginners because they are
-    easy to install, well documented, and have strong community support.
-  </p>
-
-  <h3>Which Linux distro is good for gaming?</h3>
-  <p>
-    Pop!_OS, Garuda Linux, and Nobara Linux are popular among gamers due to better driver
-    support and gaming-focused tweaks.
-  </p>
-</section>
-
-<footer>
-  Maintained by Linux enthusiasts at <strong>techrefreshing.com</strong>
-</footer>
-</main>
-
-<script>
-const BASE_URL="https://techrefreshing.com/?distro=";
-
-const quiz=[
- {q:"Your Linux experience?",o:["Beginner","Intermediate","Advanced"]},
- {q:"Main purpose?",o:["Desktop","Programming","Gaming","Server"]},
- {q:"Preference?",o:["Maximum Stability","Balanced","Latest Features"]}
-];
-
-const distros=[
- {n:"Ubuntu LTS",t:["Beginner","Desktop","Balanced"]},
- {n:"Linux Mint",t:["Beginner","Desktop","Stability"]},
- {n:"Zorin OS",t:["Beginner","Desktop"]},
- {n:"Debian Stable",t:["Stability","Server"]},
- {n:"MX Linux",t:["Stability","Desktop"]},
- {n:"openSUSE Leap",t:["Stability"]},
- {n:"Rocky Linux",t:["Server","Stability"]},
- {n:"AlmaLinux",t:["Server","Stability"]},
- {n:"Fedora Workstation",t:["Programming","Latest"]},
- {n:"Fedora Server",t:["Server","Latest"]},
- {n:"Pop!_OS",t:["Gaming","Desktop"]},
- {n:"Garuda Linux",t:["Gaming","Latest","Advanced"]},
- {n:"Nobara Linux",t:["Gaming","Latest"]},
- {n:"Regata OS",t:["Gaming"]},
- {n:"Manjaro",t:["Balanced"]},
- {n:"Arch Linux",t:["Advanced","Latest"]},
- {n:"Gentoo",t:["Advanced"]},
- {n:"Void Linux",t:["Advanced","Stability"]}
-];
-
-let step=0,answers=[];
-const content=document.getElementById("content");
-const bar=document.getElementById("bar");
-
-const slug=n=>n.replace(/\s+/g,"-").replace(/[!_]/g,"");
-
-function render(){
-  bar.style.width=(step/quiz.length)*100+"%";
-  content.innerHTML="";
-  if(step<quiz.length){
-    content.innerHTML=`<div class="question">${quiz[step].q}</div>`;
-    quiz[step].o.forEach(v=>{
-      content.innerHTML+=`<div class="option" onclick="answer('${v}')">${v}<span>→</span></div>`;
-    });
-  }else showResults();
-}
-
-function answer(v){answers.push(v);step++;render()}
-
-function showResults(){
-  bar.style.width="100%";
-  const matches=distros.filter(d=>answers.some(a=>d.t.join(" ").includes(a))).slice(0,8);
-  content.innerHTML=`<div class="question">Recommended Distros</div>`+
-  matches.map(d=>`
-    <div class="result-card">
-      <strong>${d.n}</strong><br>
-      <a href="${BASE_URL}${slug(d.n)}" target="_blank">
-        Read more on Tech Refreshing →
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo" onclick="navigate('home')">
+        <svg viewBox="0 0 100 100" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" fill="#f8fafc" stroke="#2563eb" stroke-width="6"/>
+          <path d="M40 35c-5 0-9 8-9 15s4 15 9 15 9-8 9-15-4-15-9-15zm20 0c-5 0-9 8-9 15s4 15 9 15 9-8 9-15-4-15-9-15z" fill="#0f172a"/>
+          <path d="M48 60q2 5 4 0" stroke="#f6ad55" stroke-width="4" stroke-linecap="round" fill="none"/>
+        </svg>
+        Linux Distro Chooser
       </a>
-    </div>`).join("")+
-  `<button class="reset" onclick="reset()">Start Over</button>`;
-}
+      <nav class="nav-links">
+        <a href="#" class="active" id="nav-home" onclick="navigate('home')">Home</a>
+        <a href="#" id="nav-chooser" onclick="navigate('chooser')">Chooser Tool</a>
+        <a href="#" id="nav-distros" onclick="navigate('distros')">Browse Distros</a>
+        <a href="#" id="nav-compare" onclick="navigate('compare')">Compare</a>
+      </nav>
+    </div>
+  </header>
 
-function reset(){step=0;answers=[];render()}
-render();
-</script>
+  <main>
+    <!-- Home Section -->
+    <section id="home" class="section active">
+      <div class="hero">
+        <h1>Find Your Perfect <span style="color: var(--primary)">Linux</span> Match</h1>
+        <p>Stop guessing which Linux distribution to install. Use our intuitive recommendation engine to find the right OS based on your hardware, experience level, and use case.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="navigate('chooser')" style="padding: 1rem 2rem; font-size: 1.1rem;">Help Me Choose</button>
+          <button class="btn btn-outline" onclick="navigate('compare')" style="padding: 1rem 2rem; font-size: 1.1rem;">Compare Distros</button>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 3rem;">
+        <h2>Everything you need to make the switch</h2>
+        <p style="color: var(--text-muted)">Comprehensive data and modern tools to navigate the open-source world.</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>Recommendation Engine</h3>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Answer a few simple questions and let our algorithm match you with the ideal distribution and desktop environment for your specific needs.</p>
+          <a href="#" onclick="navigate('chooser')" style="color: var(--primary); text-decoration: none; font-weight: 500;">Try the Engine &rarr;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Hardware & Resource Analysis</h3>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Compare distributions based on minimum hardware requirements and real-world resource utilization to ensure smooth performance.</p>
+          <a href="#" onclick="navigate('compare')" style="color: var(--primary); text-decoration: none; font-weight: 500;">View Comparisons &rarr;</a>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Security Best Practices</h3>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Explore dedicated guides on how to properly secure your system, understand package managers, and mitigate vulnerabilities.</p>
+          <a href="#" onclick="navigate('security')" style="color: var(--primary); text-decoration: none; font-weight: 500;">Read Security Guide &rarr;</a>
+        </div>
+      </div>
 
+      <!-- Philosophy Section -->
+      <div style="margin-top: 5rem; padding-top: 4rem; border-top: 1px solid var(--border);">
+        <div style="max-width: 800px; margin: 0 auto; color: var(--text);">
+          <div style="text-align: center; margin-bottom: 3rem;">
+            <h2 style="font-size: 2.25rem;">Why Linux? The Smart Choice for Power, Privacy, and Freedom</h2>
+            <p style="font-size: 1.1rem; color: var(--text-muted); margin-top: 1rem;">
+              If you're searching for a faster, safer, and more customizable operating system, Linux might be exactly what you need. Whether you're a beginner, developer, content creator, or privacy enthusiast, Linux offers something that traditional operating systems simply can't match.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+            <div>
+              <h3 style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;"><span style="color: var(--primary);">🚀</span> 1. Linux Is Free and Open Source</h3>
+              <p style="color: var(--text-muted); margin-bottom: 0.5rem;">One of the biggest advantages of Linux is that it's completely free to use. Unlike proprietary operating systems, Linux is built on open-source principles:</p>
+              <ul style="color: var(--text-muted); margin-left: 2rem;">
+                <li>No license fees</li>
+                <li>No forced upgrades</li>
+                <li>Full transparency</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;"><span style="color: var(--primary);">🔒</span> 2. Privacy and Security Come First</h3>
+              <p style="color: var(--text-muted); margin-bottom: 0.5rem;">In a world where data tracking is everywhere, Linux stands out as a privacy-friendly alternative.</p>
+              <ul style="color: var(--text-muted); margin-left: 2rem;">
+                <li>No built-in spyware</li>
+                <li>No hidden telemetry</li>
+                <li>Strong permission-based system</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;"><span style="color: var(--primary);">⚡</span> 3. Fast and Lightweight Performance</h3>
+              <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Linux runs smoothly even on older or low-end hardware. Many distributions are optimized for speed and efficiency.</p>
+              <ul style="color: var(--text-muted); margin-left: 2rem;">
+                <li>Faster boot times</li>
+                <li>Lower RAM usage</li>
+                <li>Better performance on old PCs</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;"><span style="color: var(--primary);">🧩</span> 4. Full Customization and Control</h3>
+              <p style="color: var(--text-muted); margin-bottom: 0.5rem;">With Linux, you're not locked into one experience. You can customize almost everything:</p>
+              <ul style="color: var(--text-muted); margin-left: 2rem;">
+                <li>Desktop environments (GNOME, KDE, XFCE)</li>
+                <li>Themes and layouts</li>
+                <li>System behavior</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;"><span style="color: var(--primary);">🌍</span> 5. Huge Community Support</h3>
+              <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Linux has one of the largest and most helpful communities in the world.</p>
+              <ul style="color: var(--text-muted); margin-left: 2rem;">
+                <li>Forums, guides, and tutorials everywhere</li>
+                <li>Fast solutions to common problems</li>
+                <li>Constant improvements from global contributors</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 1rem; padding: 2rem; margin-top: 3rem;">
+            <h4 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--text);">🎯 Find the Perfect Linux Distro for You</h4>
+            <p style="color: var(--text); margin-bottom: 1rem;">Not sure where to start? Our Linux Distro Chooser Tool helps you find the best Linux distribution based on your needs, experience level, and hardware — in just a few clicks.</p>
+            <button class="btn btn-primary" onclick="navigate('chooser')" style="margin-top: 1rem;">Start Distro Chooser</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chooser Section -->
+    <section id="chooser" class="section">
+      <div class="chooser-container">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <h2>Recommendation Engine</h2>
+          <p style="color: var(--text-muted);">Answer 3 simple questions to find your perfect Linux match.</p>
+        </div>
+        
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress-step active"></div>
+          <div class="progress-step"></div>
+          <div class="progress-step"></div>
+        </div>
+
+        <div id="step-1" class="chooser-step active">
+          <h3 class="chooser-title">What is your Linux experience level?</h3>
+          <div class="options-grid" id="exp-options">
+            <button class="option-btn" onclick="selectOption('experience', 'Beginner', this)">Beginner (Coming from Windows/macOS)</button>
+            <button class="option-btn" onclick="selectOption('experience', 'Intermediate', this)">Intermediate (Used Linux before)</button>
+            <button class="option-btn" onclick="selectOption('experience', 'Advanced', this)">Advanced (Know my way around)</button>
+            <button class="option-btn" onclick="selectOption('experience', 'Expert', this)">Expert (Complete control)</button>
+          </div>
+          <div class="chooser-actions">
+            <button class="btn btn-primary" id="btn-next-1" disabled onclick="nextStep(2)">Next Step</button>
+          </div>
+        </div>
+
+        <div id="step-2" class="chooser-step">
+          <h3 class="chooser-title">What will be your primary use case?</h3>
+          <div class="options-grid" id="use-options">
+            <button class="option-btn" onclick="selectOption('usecase', 'Daily Desktop', this)">Daily Desktop (Browsing, office work, media)</button>
+            <button class="option-btn" onclick="selectOption('usecase', 'Gaming', this)">Gaming (Steam, Proton)</button>
+            <button class="option-btn" onclick="selectOption('usecase', 'Development', this)">Development (Programming, containers)</button>
+            <button class="option-btn" onclick="selectOption('usecase', 'Server', this)">Server Hosting (Headless, web hosting)</button>
+            <button class="option-btn" onclick="selectOption('usecase', 'Privacy/Security', this)">Privacy/Security</button>
+          </div>
+          <div class="chooser-actions">
+            <button class="btn btn-outline" onclick="nextStep(1)">Back</button>
+            <button class="btn btn-primary" id="btn-next-2" disabled onclick="nextStep(3)">Next Step</button>
+          </div>
+        </div>
+
+        <div id="step-3" class="chooser-step">
+          <h3 class="chooser-title">What kind of hardware are you installing on?</h3>
+          <div class="options-grid" id="hw-options">
+            <button class="option-btn" onclick="selectOption('hardware', 'Modern', this)">Modern (4GB+ RAM, multi-core CPU, SSD)</button>
+            <button class="option-btn" onclick="selectOption('hardware', 'Older/Low-end', this)">Older/Low-end (&lt; 4GB RAM, old CPU, HDD)</button>
+          </div>
+          <div class="chooser-actions">
+            <button class="btn btn-outline" onclick="nextStep(2)">Back</button>
+            <button class="btn btn-primary" id="btn-next-3" disabled onclick="showResults()">Get Recommendations</button>
+          </div>
+        </div>
+
+        <div id="step-4" class="chooser-step">
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="font-size: 2rem;">Your Top Matches</h2>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Based on your answers, here are the best options for you.</p>
+          </div>
+          <div class="matches-list" id="matches-container">
+            <!-- Populated by JS -->
+          </div>
+          <div style="text-align: center; margin-top: 3rem;">
+            <button class="btn btn-outline" onclick="resetChooser()">Start Over</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Distros Section -->
+    <section id="distros" class="section">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <h1>Browse Linux Distributions</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">Explore the most popular distributions and filter by category.</p>
+      </div>
+
+      <div class="filters" id="distro-filters">
+        <button class="filter-btn active" onclick="filterDistros('All', this)">All</button>
+        <button class="filter-btn" onclick="filterDistros('Daily Desktop', this)">Daily Desktop</button>
+        <button class="filter-btn" onclick="filterDistros('Gaming', this)">Gaming</button>
+        <button class="filter-btn" onclick="filterDistros('Development', this)">Development</button>
+        <button class="filter-btn" onclick="filterDistros('Server', this)">Server</button>
+        <button class="filter-btn" onclick="filterDistros('Privacy/Security', this)">Privacy & Security</button>
+      </div>
+
+      <div class="distros-grid" id="distros-grid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Compare Section -->
+    <section id="compare" class="section">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <h1>Detailed Comparison</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Compare hardware requirements, resource utilization, package managers, and more across all major distributions.</p>
+      </div>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Distribution</th>
+              <th>Base / Family</th>
+              <th>Resource Utilization (Idle)</th>
+              <th>Reqs (RAM / Storage)</th>
+              <th>Package Mgr</th>
+              <th>Update Model</th>
+            </tr>
+          </thead>
+          <tbody id="compare-tbody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Security Section -->
+    <section id="security" class="section prose">
+      <h1>Linux Security Guide</h1>
+      <p>Linux is inherently secure by design, relying on strict file permissions and user privileges. However, true security comes from best practices and proper configuration.</p>
+      
+      <h2>1. Understand User Privileges</h2>
+      <p>Never run your daily tasks as the `root` user. Always use a standard user account and use `sudo` (SuperUser DO) only when administrative privileges are required. This minimizes the risk of accidental system changes.</p>
+      
+      <h2>2. Keep Your System Updated</h2>
+      <p>The single most important security practice is keeping your software up-to-date. Linux distributions regularly release security patches. Whether you use `apt upgrade`, `dnf upgrade`, or `pacman -Syu`, make it a habit.</p>
+      
+      <h2>3. Firewalls</h2>
+      <p>Most Linux distributions come with a firewall installed but not necessarily enabled. For beginners on Ubuntu/Mint, enable UFW (Uncomplicated Firewall):</p>
+      <ul>
+        <li><code>sudo ufw enable</code></li>
+        <li><code>sudo ufw status</code></li>
+      </ul>
+      
+      <h2>4. Secure SSH</h2>
+      <p>If you're running a server, SSH (Secure Shell) is your primary attack vector. Secure it by:</p>
+      <ul>
+        <li>Disabling root login (`PermitRootLogin no` in `/etc/ssh/sshd_config`)</li>
+        <li>Using Key-Based Authentication instead of passwords.</li>
+        <li>Changing the default port from 22 to something else.</li>
+      </ul>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section prose">
+      <h1>About Linux Distro Chooser</h1>
+      <p>Linux Distro Chooser was created with a singular mission: to make the vast and sometimes overwhelming world of Linux accessible to everyone. Whether you are an experienced system administrator or someone completely new to the concept of open-source operating systems, our tools are designed to point you in the right direction.</p>
+      
+      <h2>Our Story</h2>
+      <p>The sheer number of Linux distributions (often called "distros") is both the greatest strength and the most common barrier to entry for the Linux community. Users often face "analysis paralysis" trying to decision between Ubuntu, Fedora, Arch, and hundreds of others.</p>
+      <p>We realized that by asking a few targeted questions about hardware, use cases, and experience level, we could systematically filter out the noise and provide highly accurate recommendations.</p>
+      
+      <h2>Created by Tech Refreshing</h2>
+      <p>This project is proudly built and maintained by <a href="https://techrefreshing.com" target="_blank" rel="noreferrer">Tech Refreshing</a>. We are passionate about open-source software, digital privacy, and helping users take control of their technology.</p>
+      
+      <h2>Why Open Source?</h2>
+      <p>Open-source software isn't just about being free (as in price). It's about transparency, community security, and longevity. By switching to Linux, you join a global community dedicated to creating better, safer code without invasive telemetry or forced obsolescence.</p>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+      <div style="max-width: 1000px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <h1 style="font-size: 2.5rem;">Contact Us</h1>
+          <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">Have a question about a distribution? Found a bug in our recommendation engine? We'd love to hear from you.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div style="background: var(--surface); padding: 2.5rem; border-radius: 1rem; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Send us a message</h2>
+            <form action="mailto:techrefreshing02@gmail.com" method="post" enctype="text/plain">
+              <div class="form-group">
+                <label class="form-label" for="name">Name</label>
+                <input class="form-input" type="text" id="name" name="name" placeholder="John Doe">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-input" type="email" id="email" name="email" placeholder="john@example.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="message">Message</label>
+                <textarea class="form-textarea" id="message" name="message" rows="4" placeholder="How can we help?"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+            </form>
+          </div>
+
+          <div>
+            <div class="contact-info-item">
+              <div class="contact-icon-bg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </div>
+              <div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.25rem;">Email</h3>
+                <a href="mailto:techrefreshing02@gmail.com" style="color: var(--text-muted); text-decoration: none;">techrefreshing02@gmail.com</a>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">We aim to respond within 24-48 hours.</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-icon-bg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+              </div>
+              <div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.25rem;">Community Support</h3>
+                <p style="color: var(--text-muted); margin-bottom: 0;">Join our Discord server</p>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">For immediate community support regarding Linux installations.</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-icon-bg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.25rem;">Headquarters</h3>
+                <p style="color: var(--text-muted); margin-bottom: 0;">Tech Refreshing Labs</p>
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem;">Global Remote Team</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section">
+      <div style="max-width: 1000px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <h1 style="font-size: 2.5rem;">Professional Services</h1>
+          <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 700px; margin: 0 auto;">Beyond our free recommendation engine, the team at Tech Refreshing offers professional consulting and implementation services for individuals and enterprises.</p>
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+            </div>
+            <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Server Migration & Setup</h3>
+            <p style="color: var(--text-muted);">Expert assistance in migrating your existing infrastructure to robust Linux servers (Debian, Ubuntu Server, AlmaLinux). We handle security hardening, containerization, and automated deployments.</p>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Desktop Linux Transitions</h3>
+            <p style="color: var(--text-muted);">Corporate or individual transitions from Windows/macOS to Linux. We help select the right distro, set up Active Directory integrations, and ensure software compatibility through Wine/Proton or native alternatives.</p>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="M8 11h8"/><path d="M12 8v6"/></svg>
+            </div>
+            <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Security Auditing</h3>
+            <p style="color: var(--text-muted);">Comprehensive security audits of your Linux infrastructure. We review firewall configurations, SELinux/AppArmor policies, SSH hardening, and patch management processes.</p>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem;">Custom Shell Scripting & Automation</h3>
+            <p style="color: var(--text-muted);">Need to automate complex deployment workflows? We write robust Bash/Python scripts and Ansible playbooks tailored to your exact operational requirements.</p>
+          </div>
+        </div>
+
+        <div style="background: #0f172a; color: white; border-radius: 1.5rem; padding: 4rem 2rem; text-align: center; margin-top: 4rem;">
+          <h2 style="color: white; font-size: 2rem; margin-bottom: 1rem;">Ready to upgrade your infrastructure?</h2>
+          <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto 2rem; font-size: 1.1rem;">Contact our team today to discuss your specific needs and receive a tailored proposal.</p>
+          <button class="btn btn-primary" onclick="navigate('contact')" style="padding: 1rem 2rem; font-size: 1.1rem;">Contact Consulting Team</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy Policy Section -->
+    <section id="privacy-policy" class="section prose">
+      <h1>Privacy Policy</h1>
+      <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem;">Last Updated: 2026-05-03</p>
+      
+      <p>At <strong>Linux Distro Chooser</strong> (operated by Tech Refreshing), we recognize that privacy is a fundamental human right. As advocates for open-source software, we believe in minimizing data collection and maximizing transparency.</p>
+      
+      <h2>1. Information We Collect</h2>
+      <p><strong>We do not collect personal information.</strong> Our recommendation engine runs entirely locally in your web browser. When you answer questions about your experience level or hardware, that data is processed on your device and is never sent back to our servers.</p>
+      <p>We use standard, privacy-respecting analytics to understand high-level traffic patterns (e.g., how many visitors view the site daily), but this data is anonymized and unlinked from your personal identity.</p>
+      
+      <h2>2. Cookies and Tracking</h2>
+      <p>We do not use invasive tracking cookies. We do not use third-party advertising trackers. If any functional cookies are ever required for site operation, they will not be used for cross-site tracking.</p>
+      
+      <h2>3. Third-Party Links</h2>
+      <p>Our site contains numerous direct links to download Linux distributions and visit official project websites (e.g., ubuntu.com, archlinux.org). Once you click these links and leave our site, you are subject to the privacy policies of those respective organizations. We are not responsible for the privacy practices of external sites.</p>
+      
+      <h2>4. Contact Form Data</h2>
+      <p>If you choose to use our Contact Form, the information you provide (Name, Email, Message) is sent via secure email routing exclusively for the purpose of responding to your inquiry. We do not sell, rent, or share this contact data with any third parties.</p>
+      
+      <h2>5. Changes to This Policy</h2>
+      <p>We may update this privacy policy from time to time as we add new features. Any changes will be posted on this page with an updated revision date.</p>
+      
+      <h2>Contact Us</h2>
+      <p>If you have any questions or concerns regarding this Privacy Policy, please contact us at via the <a href="#" onclick="navigate('contact')">Contact Page</a> or via email at privacy@techrefreshing.com.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col" style="grid-column: span 2;">
+        <h3>Linux Distro Chooser</h3>
+        <p style="color: var(--text-muted); max-width: 300px;">Helping you navigate the open-source world and find the perfect Linux distribution for your needs.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Tools</h3>
+        <ul>
+          <li><a href="#" onclick="navigate('chooser')">Help Me Choose</a></li>
+          <li><a href="#" onclick="navigate('compare')">Compare Distros</a></li>
+          <li><a href="#" onclick="navigate('security')">Security Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#" onclick="navigate('about')">About Us</a></li>
+          <li><a href="#" onclick="navigate('contact')">Contact</a></li>
+          <li><a href="#" onclick="navigate('services')">Services</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="#" onclick="navigate('privacy-policy')">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Linux Distro Chooser. All rights reserved.</p>
+      <p>Created by <a href="https://techrefreshing.com" target="_blank" style="color: var(--primary);">techrefreshing.com</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Comprehensive Data
+    const distributions = [
+      { 
+        id: 'ubuntu', name: 'Ubuntu', family: 'Debian-based', experience: 'Beginner',
+        shortDesc: 'The most popular and beginner-friendly Linux distribution.', 
+        useCases: ['Daily Desktop', 'Development', 'Server', 'Gaming'],
+        hardwareReqs: { minRam: '4 GB', minStorage: '25 GB' },
+        resourceUtilization: { idleRam: '~1.2 GB', idleCpu: '1-3%' },
+        packageManagers: ['APT', 'Snap'], updateModel: 'Fixed Release',
+        domain: 'ubuntu.com'
+      },
+      { 
+        id: 'fedora', name: 'Fedora', family: 'Red Hat based', experience: 'Intermediate',
+        shortDesc: 'Cutting-edge software with a focus on innovation and open source.', 
+        useCases: ['Development', 'Daily Desktop', 'Server'], 
+        hardwareReqs: { minRam: '4 GB', minStorage: '20 GB' },
+        resourceUtilization: { idleRam: '~1.0 GB', idleCpu: '1-2%' },
+        packageManagers: ['DNF', 'Flatpak'], updateModel: 'Fixed Release',
+        domain: 'fedoraproject.org'
+      },
+      { 
+        id: 'debian', name: 'Debian', family: 'Independent', experience: 'Intermediate',
+        shortDesc: 'The universal operating system, known for ultimate stability.', 
+        useCases: ['Server', 'Development', 'Daily Desktop'], 
+        hardwareReqs: { minRam: '1 GB', minStorage: '10 GB' },
+        resourceUtilization: { idleRam: '~500 MB', idleCpu: '< 1%' },
+        packageManagers: ['APT'], updateModel: 'Fixed Release',
+        domain: 'debian.org'
+      },
+      { 
+        id: 'arch', name: 'Arch Linux', family: 'Independent', experience: 'Expert',
+        shortDesc: 'A simple, lightweight distribution that lets you build your system from scratch.', 
+        useCases: ['Development', 'Daily Desktop', 'Gaming'], 
+        hardwareReqs: { minRam: '512 MB', minStorage: '2 GB' },
+        resourceUtilization: { idleRam: '~150 MB', idleCpu: '~0%' },
+        packageManagers: ['Pacman', 'AUR'], updateModel: 'Rolling Release',
+        domain: 'archlinux.org'
+      },
+      { 
+        id: 'linux-mint', name: 'Linux Mint', family: 'Ubuntu-based', experience: 'Beginner',
+        shortDesc: 'Produces a modern, elegant and comfortable operating system.', 
+        useCases: ['Daily Desktop', 'Multimedia Production'], 
+        hardwareReqs: { minRam: '2 GB', minStorage: '20 GB' },
+        resourceUtilization: { idleRam: '~800 MB', idleCpu: '1-2%' },
+        packageManagers: ['APT', 'Flatpak'], updateModel: 'Fixed Release',
+        domain: 'linuxmint.com'
+      },
+      { 
+        id: 'pop-os', name: 'Pop!_OS', family: 'Ubuntu-based', experience: 'Beginner',
+        shortDesc: 'Built for STEM and creative professionals.', 
+        useCases: ['Gaming', 'Development', 'Multimedia Production'], 
+        hardwareReqs: { minRam: '4 GB', minStorage: '20 GB' },
+        resourceUtilization: { idleRam: '~1.3 GB', idleCpu: '1-3%' },
+        packageManagers: ['APT', 'Flatpak'], updateModel: 'Fixed Release',
+        domain: 'pop.system76.com'
+      },
+      { 
+        id: 'manjaro', name: 'Manjaro', family: 'Arch-based', experience: 'Intermediate',
+        shortDesc: 'An accessible, friendly rolling release distribution.', 
+        useCases: ['Gaming', 'Daily Desktop', 'Development'], 
+        hardwareReqs: { minRam: '2 GB', minStorage: '30 GB' },
+        resourceUtilization: { idleRam: '~1.0 GB', idleCpu: '1-2%' },
+        packageManagers: ['Pacman', 'Pamac'], updateModel: 'Rolling Release',
+        domain: 'manjaro.org'
+      },
+      { 
+        id: 'opensuse', name: 'openSUSE', family: 'SUSE', experience: 'Intermediate',
+        shortDesc: 'The makers\' choice for sysadmins, developers and desktop users.', 
+        useCases: ['Server', 'Development', 'Daily Desktop'], 
+        hardwareReqs: { minRam: '2 GB', minStorage: '40 GB' },
+        resourceUtilization: { idleRam: '~1.0 GB', idleCpu: '1-2%' },
+        packageManagers: ['Zypper'], updateModel: 'Hybrid',
+        domain: 'opensuse.org'
+      },
+      { 
+        id: 'kali', name: 'Kali Linux', family: 'Debian-based', experience: 'Expert',
+        shortDesc: 'Advanced Penetration Testing and Security Auditing Linux distribution.', 
+        useCases: ['Privacy/Security'], 
+        hardwareReqs: { minRam: '2 GB', minStorage: '20 GB' },
+        resourceUtilization: { idleRam: '~600 MB', idleCpu: '1%' },
+        packageManagers: ['APT'], updateModel: 'Rolling Release',
+        domain: 'kali.org'
+      },
+      { 
+        id: 'almalinux', name: 'AlmaLinux', family: 'Red Hat based', experience: 'Advanced',
+        shortDesc: 'An Open Source, enterprise Linux distribution.', 
+        useCases: ['Server'], 
+        hardwareReqs: { minRam: '1.5 GB', minStorage: '20 GB' },
+        resourceUtilization: { idleRam: '~400 MB', idleCpu: '~0%' },
+        packageManagers: ['DNF', 'RPM'], updateModel: 'Fixed Release',
+        domain: 'almalinux.org'
+      },
+      { 
+        id: 'endeavouros', name: 'EndeavourOS', family: 'Arch-based', experience: 'Intermediate',
+        shortDesc: 'A terminal-centric distro with a vibrant community.', 
+        useCases: ['Development', 'Gaming', 'Daily Desktop'], 
+        hardwareReqs: { minRam: '4 GB', minStorage: '15 GB' },
+        resourceUtilization: { idleRam: '~700 MB', idleCpu: '1%' },
+        packageManagers: ['Pacman', 'AUR'], updateModel: 'Rolling Release',
+        domain: 'endeavouros.com'
+      },
+      { 
+        id: 'void', name: 'Void Linux', family: 'Independent', experience: 'Advanced',
+        shortDesc: 'An independent, rolling-release OS using runit init.', 
+        useCases: ['Development', 'Server', 'Daily Desktop'], 
+        hardwareReqs: { minRam: '256 MB', minStorage: '5 GB' },
+        resourceUtilization: { idleRam: '~100 MB', idleCpu: '< 1%' },
+        packageManagers: ['XBPS'], updateModel: 'Rolling Release',
+        domain: 'voidlinux.org'
+      },
+      {
+        id: 'zorin', name: 'Zorin OS', family: 'Ubuntu-based', experience: 'Beginner',
+        shortDesc: 'Designed to be the ultimate alternative to Windows and macOS.',
+        useCases: ['Daily Desktop'], 
+        hardwareReqs: { minRam: '2 GB', minStorage: '15 GB' },
+        resourceUtilization: { idleRam: '~900 MB', idleCpu: '1-2%' },
+        packageManagers: ['APT', 'Flatpak', 'Snap'], updateModel: 'Fixed Release',
+        domain: 'zorin.com'
+      },
+      {
+        id: 'elementary', name: 'elementary OS', family: 'Ubuntu-based', experience: 'Beginner',
+        shortDesc: 'The thoughtful, capable, and ethical replacement for Windows and macOS.',
+        useCases: ['Daily Desktop', 'Multimedia Production'],
+        hardwareReqs: { minRam: '4 GB', minStorage: '15 GB' },
+        resourceUtilization: { idleRam: '~1.1 GB', idleCpu: '1-3%' },
+        packageManagers: ['APT', 'Flatpak'], updateModel: 'Fixed Release',
+        domain: 'elementary.io'
+      },
+      {
+        id: 'mx-linux', name: 'MX Linux', family: 'Debian-based', experience: 'Intermediate',
+        shortDesc: 'A midweight OS designed to combine an elegant desktop with simple configuration.',
+        useCases: ['Daily Desktop'],
+        hardwareReqs: { minRam: '1 GB', minStorage: '15 GB' },
+        resourceUtilization: { idleRam: '~500 MB', idleCpu: '1%' },
+        packageManagers: ['APT'], updateModel: 'Fixed Release',
+        domain: 'mxlinux.org'
+      },
+      {
+        id: 'garuda', name: 'Garuda Linux', family: 'Arch-based', experience: 'Intermediate',
+        shortDesc: 'A beautiful Arch-based rolling release distro, focused on performance and gaming.',
+        useCases: ['Gaming', 'Daily Desktop'],
+        hardwareReqs: { minRam: '4 GB', minStorage: '30 GB' },
+        resourceUtilization: { idleRam: '~1.5 GB', idleCpu: '2-4%' },
+        packageManagers: ['Pacman', 'AUR'], updateModel: 'Rolling Release',
+        domain: 'garudalinux.org'
+      },
+      {
+        id: 'kde-neon', name: 'KDE Neon', family: 'Ubuntu-based', experience: 'Intermediate',
+        shortDesc: 'The latest KDE Plasma desktop running on top of a stable Ubuntu LTS base.',
+        useCases: ['Daily Desktop', 'Development'],
+        hardwareReqs: { minRam: '2 GB', minStorage: '20 GB' },
+        resourceUtilization: { idleRam: '~900 MB', idleCpu: '1-2%' },
+        packageManagers: ['APT', 'Snap', 'Flatpak'], updateModel: 'Fixed Release',
+        domain: 'neon.kde.org'
+      },
+      {
+        id: 'rocky', name: 'Rocky Linux', family: 'Red Hat based', experience: 'Advanced',
+        shortDesc: 'A community enterprise operating system designed to be 100% bug-for-bug compatible with RHEL.',
+        useCases: ['Server'],
+        hardwareReqs: { minRam: '2 GB', minStorage: '20 GB' },
+        resourceUtilization: { idleRam: '~400 MB', idleCpu: '~0%' },
+        packageManagers: ['DNF', 'RPM'], updateModel: 'Fixed Release',
+        domain: 'rockylinux.org'
+      },
+      {
+        id: 'nixos', name: 'NixOS', family: 'Independent', experience: 'Expert',
+        shortDesc: 'A Linux distribution built on top of the Nix package manager.',
+        useCases: ['Development', 'Server', 'Daily Desktop'],
+        hardwareReqs: { minRam: '2 GB', minStorage: '20 GB' },
+        resourceUtilization: { idleRam: '~600 MB', idleCpu: '1%' },
+        packageManagers: ['Nix'], updateModel: 'Rolling Release',
+        domain: 'nixos.org'
+      }
+    ];
+
+    // Navigation Logic
+    function navigate(viewId) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+      
+      // Remove active class from nav links
+      document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
+      
+      // If viewId exists (e.g. security isn't in top nav but linked from footer)
+      const section = document.getElementById(viewId);
+      if(section) {
+        section.classList.add('active');
+        window.scrollTo(0, 0); // Scroll to top on navigation
+      }
+      
+      // Highlight nav link if it exists
+      const navLink = document.getElementById('nav-' + viewId);
+      if(navLink) {
+        navLink.classList.add('active');
+      }
+    }
+
+    // Render Distros Grid
+    function renderDistros(filter = 'All') {
+      const grid = document.getElementById('distros-grid');
+      grid.innerHTML = '';
+      
+      const filtered = filter === 'All' 
+        ? distributions 
+        : distributions.filter(d => d.useCases.includes(filter));
+      
+      filtered.forEach(distro => {
+        const tagsHtml = distro.useCases.slice(0, 3).map(u => `<span class="tag">${u}</span>`).join('');
+        const iconUrl = 'https://www.google.com/s2/favicons?domain=' + distro.domain + '&sz=64';
+        grid.innerHTML += `
+          <div class="distro-card">
+            <div class="distro-header">
+              <div class="distro-icon" style="background: transparent;">
+                <img src="${iconUrl}" alt="${distro.name} logo" style="width: 32px; height: 32px; object-fit: contain;">
+              </div>
+              <div>
+                <div class="distro-title">${distro.name}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">${distro.family}</div>
+              </div>
+            </div>
+            <p class="distro-desc">${distro.shortDesc}</p>
+            <div class="distro-tags">${tagsHtml}</div>
+            <div style="font-size: 0.85rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+              <span style="color: var(--text-muted)">Experience: </span><strong style="color: var(--text);">${distro.experience}</strong>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Render Compare Table
+    function renderCompareTable() {
+      const tbody = document.getElementById('compare-tbody');
+      tbody.innerHTML = '';
+      
+      distributions.forEach(distro => {
+        const pkgHtml = distro.packageManagers.map(p => `<span class="tag">${p}</span>`).join('');
+        tbody.innerHTML += `
+          <tr>
+            <td>
+              <div style="font-weight: 600; color: var(--text);">${distro.name}</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">${distro.experience}</div>
+            </td>
+            <td style="color: var(--text-muted); font-size: 0.9rem;">${distro.family}</td>
+            <td>
+              <div style="font-size: 0.9rem;">RAM: ${distro.resourceUtilization.idleRam}</div>
+              <div style="font-size: 0.9rem;">CPU: ${distro.resourceUtilization.idleCpu}</div>
+            </td>
+            <td>
+              <div style="font-size: 0.9rem;">${distro.hardwareReqs.minRam}</div>
+              <div style="font-size: 0.9rem;">${distro.hardwareReqs.minStorage}</div>
+            </td>
+            <td><div style="display: flex; gap: 0.25rem; flex-wrap: wrap;">${pkgHtml}</div></td>
+            <td style="font-size: 0.9rem; font-weight: 500;">${distro.updateModel}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function filterDistros(usecase, btnEl) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      btnEl.classList.add('active');
+      renderDistros(usecase);
+    }
+
+    // Chooser Logic
+    let state = {
+      experience: null,
+      usecase: null,
+      hardware: null
+    };
+
+    function selectOption(category, value, btnEl) {
+      state[category] = value;
+      const parent = btnEl.parentElement;
+      parent.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+      btnEl.classList.add('selected');
+      
+      if (category === 'experience') document.getElementById('btn-next-1').disabled = false;
+      if (category === 'usecase') document.getElementById('btn-next-2').disabled = false;
+      if (category === 'hardware') document.getElementById('btn-next-3').disabled = false;
+    }
+
+    function nextStep(step) {
+      document.querySelectorAll('.chooser-step').forEach(el => el.classList.remove('active'));
+      document.getElementById('step-' + step).classList.add('active');
+      
+      const pBars = document.querySelectorAll('.progress-step');
+      pBars.forEach((p, idx) => {
+        if (idx < step) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+      if(step === 4) document.getElementById('progress-bar').style.display = 'none';
+      else document.getElementById('progress-bar').style.display = 'flex';
+    }
+
+    function showResults() {
+      let matches = distributions;
+      
+      if (state.experience === 'Beginner') {
+        matches = matches.filter(d => d.experience === 'Beginner' || d.id === 'manjaro');
+      } else if (state.experience === 'Intermediate') {
+        matches = matches.filter(d => d.experience !== 'Expert');
+      }
+
+      if (state.usecase) {
+        matches.sort((a, b) => {
+          const aHas = a.useCases.includes(state.usecase) ? 1 : 0;
+          const bHas = b.useCases.includes(state.usecase) ? 1 : 0;
+          return bHas - aHas;
+        });
+      }
+
+      if (state.hardware === 'Older/Low-end') {
+        matches = matches.filter(d => ['debian', 'arch', 'linux-mint', 'void'].includes(d.id));
+      }
+
+      const top3 = matches.slice(0, 3);
+      const container = document.getElementById('matches-container');
+      container.innerHTML = '';
+      
+      top3.forEach((distro, index) => {
+        const isTop = index === 0;
+        const iconUrl = 'https://www.google.com/s2/favicons?domain=' + distro.domain + '&sz=64';
+        container.innerHTML += `
+          <div class="match-card ${isTop ? 'top-match' : ''}">
+            ${isTop ? '<div class="top-match-badge">Top Match</div>' : ''}
+            <div class="distro-icon" style="flex-shrink: 0; width: 4rem; height: 4rem; background: transparent;">
+              <img src="${iconUrl}" alt="${distro.name} logo" style="width: 48px; height: 48px; object-fit: contain;">
+            </div>
+            <div class="match-info">
+              <div class="match-title">${distro.name}</div>
+              <p style="color: var(--text-muted); margin-bottom: 0.5rem;">${distro.shortDesc}</p>
+              <div class="tag" style="display:inline-block;">Family: ${distro.family}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      nextStep(4);
+    }
+
+    function resetChooser() {
+      state = { experience: null, usecase: null, hardware: null };
+      document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+      document.getElementById('btn-next-1').disabled = true;
+      document.getElementById('btn-next-2').disabled = true;
+      document.getElementById('btn-next-3').disabled = true;
+      nextStep(1);
+    }
+
+    // Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDistros('All');
+      renderCompareTable();
+    });
+  </script>
 </body>
 </html>
