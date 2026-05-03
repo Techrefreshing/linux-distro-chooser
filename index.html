@@ -924,7 +924,7 @@
         <div class="contact-grid">
           <div style="background: var(--surface); padding: 2.5rem; border-radius: 1rem; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Send us a message</h2>
-            <form action="mailto:techrefreshing02@gmail.com" method="post" enctype="text/plain">
+            <form onsubmit="event.preventDefault(); window.location.href='mailto:techrefreshing02@gmail.com?subject=Contact from ' + document.getElementById('name').value + '&body=' + encodeURIComponent('From: ' + document.getElementById('email').value + '\n\n' + document.getElementById('message').value); return false;">
               <div class="form-group">
                 <label class="form-label" for="name">Name</label>
                 <input class="form-input" type="text" id="name" name="name" placeholder="John Doe">
@@ -1088,7 +1088,7 @@
     </div>
     <div class="footer-bottom">
       <p>&copy; 2026 Linux Distro Chooser. All rights reserved.</p>
-      <p>Created by <a href="https://techrefreshing.com" target="_blank" style="color: var(--primary);">techrefreshing.com</a></p>
+      <p>Created by <a href="https://techrefreshing.com" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">techrefreshing.com</a></p>
     </div>
   </footer>
 
