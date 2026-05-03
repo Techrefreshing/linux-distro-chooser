@@ -16,7 +16,6 @@
   <meta name="twitter:description" content="An intuitive helper for choosing the right Linux distribution based on user needs, hardware, and experience level.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐧</text></svg>">
   <link rel="manifest" href="manifest.json">
-  <meta name="google-site-verification" content="7ibcnMoNz2NhgIDVPhvyhxFmism6645gTmYTwAnhm6I" />
   <style>
     :root {
       --primary: #2563eb;
@@ -618,6 +617,96 @@
       gap: 1rem;
     }
     
+    /* Article Slider */
+    .article-slider-wrapper {
+      position: relative;
+      margin: 3rem 0;
+    }
+    .article-slider {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 2rem;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: thin; /* Firefox */
+    }
+    .article-slider::-webkit-scrollbar {
+      height: 8px;
+    }
+    .article-slider::-webkit-scrollbar-track {
+      background: var(--background);
+      border-radius: 4px;
+    }
+    .article-slider::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    .article-slider::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+    .article-card {
+      min-width: 300px;
+      max-width: 350px;
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .article-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      border-color: var(--primary);
+    }
+    .article-thumb {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: var(--border);
+    }
+    .article-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .article-source {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    .article-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .article-date {
+      margin-top: auto;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .slider-loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+    
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.5rem; }
       .match-card { flex-direction: column; align-items: flex-start; }
@@ -760,6 +849,23 @@
           <h3>Security Best Practices</h3>
           <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Explore dedicated guides on how to properly secure your system, understand package managers, and mitigate vulnerabilities.</p>
           <a href="#" onclick="navigate('security')" style="color: var(--primary); text-decoration: none; font-weight: 500;">Read Security Guide &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Latest Articles Slider -->
+      <div style="margin-top: 5rem; padding-top: 4rem; border-top: 1px solid var(--border);">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <h2 style="font-size: 2.25rem;">Latest from the Community</h2>
+          <p style="font-size: 1.1rem; color: var(--text-muted); margin-top: 1rem;">
+            Read the latest guides, news, and tutorials from Tech Refreshing and Linuxano.
+          </p>
+        </div>
+        <div class="article-slider-wrapper">
+          <div id="article-slider" class="article-slider">
+            <div class="slider-loading" style="width: 100%;">
+              Loading latest articles...
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1587,10 +1693,104 @@
       nextStep(1);
     }
 
+    // Fetch latest articles from blogs
+    async function loadLatestArticles() {
+      const slider = document.getElementById('article-slider');
+      if (!slider) return;
+
+      const feeds = [
+        { url: 'https://techrefreshing.com/feed', name: 'Tech Refreshing' },
+        { url: 'https://linuxano.com/feed', name: 'Linuxano' }
+      ];
+
+      const getFeedUrl = (rssUrl) => `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+      
+      let allArticles = [];
+
+      try {
+        const promises = feeds.map(feed => 
+          fetch(getFeedUrl(feed.url))
+            .then(res => res.json())
+            .then(data => {
+              if (data.status === 'ok' && data.items) {
+                return data.items.map(item => ({
+                  ...item,
+                  sourceName: feed.name
+                }));
+              }
+              return [];
+            })
+            .catch(e => {
+              console.error(`Failed to load feed from ${feed.name}:`, e);
+              return [];
+            })
+        );
+
+        const results = await Promise.all(promises);
+        
+        // Flatten and sort by date descending
+        allArticles = results.flat().sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        
+        if (allArticles.length === 0) {
+          slider.innerHTML = '<div class="slider-loading">No articles found at the moment. Please check back later.</div>';
+          return;
+        }
+
+        // Limit to latest 10 articles
+        allArticles = allArticles.slice(0, 10);
+        
+        slider.innerHTML = ''; // clear loading
+        
+        allArticles.forEach(article => {
+          // Fallback image if thumbnail doesn't exist
+          let thumbnail = article.thumbnail || article.enclosure?.link;
+          if (!thumbnail && article.content) {
+            const imgMatch = article.content.match(/<img[^>]+src="([^">]+)"/);
+            if (imgMatch && imgMatch[1]) {
+              thumbnail = imgMatch[1];
+            }
+          }
+          if (!thumbnail) thumbnail = 'https://images.unsplash.com/photo-1629654297299-c8506221ca97?auto=format&fit=crop&w=400&q=80';
+          
+          // Formatting date
+          const date = new Date(article.pubDate).toLocaleDateString(undefined, { 
+            year: 'numeric', month: 'short', day: 'numeric' 
+          });
+
+          // Decoding HTML entities in title
+          const titleDiv = document.createElement('div');
+          titleDiv.innerHTML = article.title;
+          const cleanTitle = titleDiv.textContent || titleDiv.innerText || article.title;
+
+          const card = document.createElement('a');
+          card.href = article.link;
+          card.target = '_blank';
+          card.rel = 'noopener'; // removed noreferrer so your Analytics tracks the referral
+          card.className = 'article-card';
+          
+          card.innerHTML = `
+            <img src="${thumbnail}" class="article-thumb" alt="" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1629654297299-c8506221ca97?auto=format&fit=crop&w=400&q=80'">
+            <div class="article-content">
+              <div class="article-source">${article.sourceName}</div>
+              <h3 class="article-title">${cleanTitle}</h3>
+              <div class="article-date">${date}</div>
+            </div>
+          `;
+          
+          slider.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+        slider.innerHTML = '<div class="slider-loading">Unable to load the latest articles.</div>';
+      }
+    }
+
     // Initialization
     window.addEventListener('DOMContentLoaded', () => {
       renderDistros('All');
       renderCompareTable();
+      loadLatestArticles();
     });
   </script>
 </body>
