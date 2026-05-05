@@ -795,6 +795,11 @@
     }]
   }
   </script>
+  <script>
+    if (window.location.hostname.startsWith('www.')) {
+      window.location.replace(window.location.href.replace('://www.', '://'));
+    }
+  </script>
 </head>
 <body>
 
